@@ -136,19 +136,25 @@ grpc::Status ArchiveService::WithFlagAll(grpc::ServerContext *const context,
 grpc::Status ArchiveService::SetFlags(grpc::ServerContext *const context,
                                       const ChangeFlagsRequest *const request,
                                       problem::StatusMap *const response) {
-  return grpc::Status::CANCELLED;
+  BUNSAN_RPC_IMPLEMENT_RESPONSE(context, request, response, authorize, {
+    return m_repository->set_flags_all(request->ids(), request->flag());
+  })
 }
 
 grpc::Status ArchiveService::UnsetFlags(grpc::ServerContext *const context,
                                         const ChangeFlagsRequest *const request,
                                         problem::StatusMap *const response) {
-  return grpc::Status::CANCELLED;
+  BUNSAN_RPC_IMPLEMENT_RESPONSE(context, request, response, authorize, {
+    return m_repository->unset_flags_all(request->ids(), request->flag());
+  })
 }
 
 grpc::Status ArchiveService::ClearFlags(grpc::ServerContext *const context,
                                         const problem::IdSet *const request,
                                         problem::StatusMap *const response) {
-  return grpc::Status::CANCELLED;
+  BUNSAN_RPC_IMPLEMENT_RESPONSE(context, request, response, authorize, {
+    return m_repository->clear_flags_all(*request);
+  })
 }
 
 template <typename Request, typename Response>
